@@ -1,0 +1,30 @@
+version: '3'
+
+volumes:
+  webapp:
+
+services:
+
+  # App
+  app:
+    build: ./app
+    container_name: simplephp_app
+    restart: unless-stopped
+    environment:
+      - ENV LOGGER=false
+    volumes:
+      - webapp:/var/www
+
+  # Caddy
+  web:
+    build: ./web
+    container_name: simplephp_web
+    restart: unless-stopped
+    environment:
+      - LOGGER=false
+    volumes:
+      - webapp:/var/www:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - app

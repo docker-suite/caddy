@@ -1,0 +1,8 @@
+http://localhost {
+
+    root    /var/www
+    fastcgi / app:9000 php
+    log     stdout
+    errors  stdout
+    #on startup php-fpm
+}
