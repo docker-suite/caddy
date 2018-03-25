@@ -14,7 +14,7 @@ max_line_length = 0
 trim_trailing_whitespace = false
 
 [*.json]
-indent_size =
+indent_size = 2
 
 [Dockerfile]
 trim_trailing_whitespace = false
