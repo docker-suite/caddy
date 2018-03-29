@@ -32,7 +32,10 @@ CADDYPATH=${CADDYPATH:=/etc/caddy/certificates}
 # A Caddyfile must exist in /etc/caddy
 # if not, just create a default simple one
 if [ ! -f /etc/caddy/Caddyfile ]; then
-    echo "0.0.0.0" > /etc/caddy/Caddyfile
+    echo "# Caddy config file" > /etc/caddy/Caddyfile
+    echo "# See: https://caddyserver.com/docs/caddyfile" >> /etc/caddy/Caddyfile
+    echo "" >> /etc/caddy/Caddyfile
+    echo "0.0.0.0" >> /etc/caddy/Caddyfile
     echo "root /var/www" >> /etc/caddy/Caddyfile
     echo "log stdout" >> /etc/caddy/Caddyfile
     echo "errors stdout" >> /etc/caddy/Caddyfile
@@ -40,9 +43,9 @@ if [ ! -f /etc/caddy/Caddyfile ]; then
 fi
 
 # Let's go and start Caddy
-echo >&2
+echo >&2 ''
 echo >&2 'Starting Caddy service'
-echo >&2
+echo >&2 ''
 exec su-exec caddy /usr/sbin/caddy ${CADDY_STARTPARAMS}
 
 # This exit code will be sent as the first parameter to the finish script
