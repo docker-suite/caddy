@@ -46,7 +46,7 @@ fi
 echo >&2 ''
 echo >&2 'Starting Caddy service'
 echo >&2 ''
-exec su-exec caddy /usr/sbin/caddy ${CADDY_STARTPARAMS}
+exec su-exec caddy /usr/bin/caddy ${CADDY_STARTPARAMS}
 
 # This exit code will be sent as the first parameter to the finish script
 exit 1

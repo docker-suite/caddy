@@ -4,4 +4,4 @@
 # set -u : Exit the script when using uninitialised variable.
 set -eu
 
-[ -f /usr/sbin/caddy ] && /usr/sbin/caddy -version
+[ -f /usr/bin/caddy ] && /usr/bin/caddy -version
