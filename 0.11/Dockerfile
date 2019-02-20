@@ -17,6 +17,9 @@ FROM craftdock/alpine-runit:latest
 LABEL maintainer="Hexosse <hexosse@gmail.com>" \
       description="Minimal Alpine image with Caddy server."
 
+ENV CADDY_MAJOR 0.11
+ENV CADDY_VERSION 0.11.4
+
 COPY --from=caddy_apk_builder /tmp/caddy /tmp/caddy
 
 RUN \
@@ -26,7 +29,7 @@ RUN \
     && apk-update \
     # Install Caddy server
     && apk-install --repository /tmp/caddy --allow-untrusted \
-        caddy \
+        caddy=${CADDY_VERSION}-r0 \
 	# Clear apk's cache
 	&& apk-cleanup
 
