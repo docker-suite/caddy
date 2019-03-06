@@ -18,7 +18,7 @@ LABEL maintainer="Hexosse <hexosse@gmail.com>" \
       description="Minimal Alpine image with Caddy server."
 
 ENV CADDY_MAJOR 0.11
-ENV CADDY_VERSION 0.11.4
+ENV CADDY_VERSION 0.11.5
 
 COPY --from=caddy_apk_builder /tmp/caddy /tmp/caddy
 
