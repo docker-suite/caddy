@@ -1,7 +1,0 @@
-localhost
-
-root /var/www
-
-log stdout
-
-errors stdout

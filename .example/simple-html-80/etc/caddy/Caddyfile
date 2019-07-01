@@ -1,7 +1,0 @@
-localhost:80 {
-
-    root        /var/www
-    log         stdout
-    errors      stdout
-
-}

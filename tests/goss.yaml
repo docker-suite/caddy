@@ -1,0 +1,33 @@
+file:
+  /etc/service.d/caddy:
+    exists: true
+    filetype: directory
+  /etc/service.d/caddy/enable:
+    exists: true
+    filetype: file
+  /etc/service.d/caddy/finish:
+    exists: true
+    filetype: file
+  /etc/service.d/caddy/run:
+    exists: true
+    mode: "0777"
+    filetype: file
+  /usr/bin/caddy:
+    exists: true
+    mode: "0755"
+    filetype: file
+
+group:
+  caddy:
+    exists: true
+    gid: 101
+    skip: false
+
+user:
+  caddy:
+    exists: true
+    uid: 100
+    gid: 101
+    groups:
+    - caddy
+    skip: false

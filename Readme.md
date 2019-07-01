@@ -1,19 +1,25 @@
-# caddy
+# ![](https://github.com/docker-suite/artwork/raw/master/logo/png/logo_32.png) caddy
+[![Build Status](http://jenkins.hexocube.fr/job/docker-suite/job/caddy/badge/icon?color=green&style=flat-square)](http://jenkins.hexocube.fr/job/docker-suite/job/caddy/)
+![Docker Pulls](https://img.shields.io/docker/pulls/dsuite/caddy.svg?style=flat-square)
+![Docker Stars](https://img.shields.io/docker/stars/dsuite/caddy.svg?style=flat-square)
+![MicroBadger Layers (tag)](https://img.shields.io/microbadger/layers/dsuite/caddy/latest.svg?style=flat-square)
+![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/dsuite/caddy/latest.svg?style=flat-square)
+[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 This is a docker image for [Caddy][caddy] server running on [Alpine container][alpine-runit] with [runit][runit] process supervisor.
 
-## Volumes
+## ![](https://github.com/docker-suite/artwork/raw/master/various/pin/png/pin_16.png) Volumes
 - /etc/caddy
 - /etc/caddy/certificates
 - /var/www
 - /var/log
 
-## Ports
+## ![](https://github.com/docker-suite/artwork/raw/master/various/pin/png/pin_16.png) Ports
 - 80
 - 443
 - 2015
 
-## Available environment variables
+## ![](https://github.com/docker-suite/artwork/raw/master/various/pin/png/pin_16.png) Available environment variables
 
 Name                | Default value 
 --------------------|-------------------------------------------------
@@ -31,20 +37,20 @@ CADDY_HTTPS_PORT    | `443`
 PGID                | `1050`
 PUID                | `1050`
 
-## How to use this image
+## ![](https://github.com/docker-suite/artwork/raw/master/various/pin/png/pin_16.png) How to use this image
 
 ```Dockerfile
-docker build -t craftdock/caddy .
+docker build -t dsuite/caddy .
 ```
 
 ```Dockerfile
 docker run -it -d --name=caddy \
         -p 2015:2015 \
-        -v $(PWD)/caddy/file/:/etc/caddy \
-        -v $(PWD)/caddy/www/:/var/www \
-            craftdock/caddy
+        -v $(PWD)/path/to/Caddyfile:/etc/caddy/Caddyfile \
+        -v $(PWD)/path/to/www:/var/www \
+            dsuite/caddy:1.0
 ```
-Point your browser to `http://127.0.0.1:2015`.
+Point your browser to `http://localhost:2015`.
 
 ### Saving Certificates
 
@@ -53,16 +59,16 @@ Save certificates on host machine to prevent regeneration every time container s
 ```Dockerfile
 docker run -it -d --name=caddy \
         -p 80:80 -p 443:443 \
-        -v $(PWD)/caddy/cert/:/root/.caddy \
-        -v $(PWD)/caddy/file/:/etc/caddy \
-        -v $(PWD)/caddy/www/:/var/www \
-            craftdock/caddy
+        -v $(PWD)/path/to/certs:/etc/caddy/certificates \
+        -v $(PWD)/path/to/Caddyfile:/etc/caddy/Caddyfile \
+        -v $(PWD)/path/to/www:/var/www \
+            dsuite/caddy:1.0
 ```
-Here, `/root/.caddy` is the location inside the container where caddy will save certificates.
+Here, `/etc/caddy/certificates` is the location inside the container where caddy will save certificates.
 
 To start or stop caddy, get an sh command prompt inside the container:
 
-```powershell
+```bash
 docker exec -it caddy sh
 
 # Start caddy
@@ -78,21 +84,14 @@ runit service caddy status
 runit stop
 ```
 
-## An example
+## ![](https://github.com/docker-suite/artwork/raw/master/various/pin/png/pin_16.png) An example
 
-Have a look at the [example folder](https://github.com/CraftDock/caddy/tree/master/example). You'll find out how to create an image based on craftdock/caddy
-
-This example folder contains:
-- A simple web site (``simple-html`)
-- A simple web site (``simple-html-2`)
-- A simple web site on port 80 (``simple-html-80`)
-- A simple web site on port 8080 (``simple-html-8080`)
-- A simple web site (``simple-html-2`)
+Have a look at the [example folder](https://github.com/docker-suite/caddy/tree/master/.example). You'll find out how to create an image based on dsuite/caddy
 
 
 [alpine]: http://alpinelinux.org/
 [runit]: http://smarden.org/runit/
-[alpine-runit]: https://hub.docker.com/r/craftdock/alpine-runit/
+[alpine-runit]: https://hub.docker.com/r/dsuite/alpine-runit/
 [caddy]: https://caddyserver.com/
 
 

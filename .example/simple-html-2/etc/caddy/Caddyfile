@@ -1,5 +1,0 @@
-0.0.0.0
-
-root    /var/www
-log     /var/log/caddy_access.log
-errors  /var/log/caddy_errors.log
