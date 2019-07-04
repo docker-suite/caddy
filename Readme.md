@@ -84,6 +84,20 @@ runit service caddy status
 runit stop
 ```
 
+## ![](https://github.com/docker-suite/artwork/raw/master/various/pin/png/pin_16.png) How to add plugins
+
+`dsuite/caddy` comes with an installer which download and intall the latest version from caddyserver.com  
+Update the `PLUGINS` environment variable with a coma separated list of plugin and run `caddy-install.sh` to download and install the latest version of caddy with the desired plugins.
+
+### with a docker file
+
+```Dockerfile
+FROM dsuite/caddy:latest
+
+ENV PLUGINS="http.git"
+```
+
+
 ## ![](https://github.com/docker-suite/artwork/raw/master/various/pin/png/pin_16.png) An example
 
 Have a look at the [example folder](https://github.com/docker-suite/caddy/tree/master/.example). You'll find out how to create an image based on dsuite/caddy

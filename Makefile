@@ -1,40 +1,18 @@
 DIR:=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
 PROJECT_NAME:=$(strip $(shell basename $(DIR)))
 DOCKER_IMAGE=dsuite/$(PROJECT_NAME)
+CADDY_VERSION=latest
 
-
-build: build-0.10 build-0.11 build-1.0
-
-test: test-0.10 test-0.11 test-1.0
-
-push: push-0.10 push-0.11 push-1.0
-
-build-0.10:
+build:
+	# Build caddy image
 	@docker build \
 		--build-arg http_proxy=${http_proxy} \
 		--build-arg https_proxy=${https_proxy} \
-		--file $(DIR)/Dockerfiles/Dockerfile-0.10 \
-		--tag $(DOCKER_IMAGE):0.10 \
-		$(DIR)/Dockerfiles
+		--file $(DIR)/Dockerfile \
+		--tag $(DOCKER_IMAGE):$(CADDY_VERSION) \
+		$(DIR)
 
-build-0.11:
-	@docker build \
-		--build-arg http_proxy=${http_proxy} \
-		--build-arg https_proxy=${https_proxy} \
-		--file $(DIR)/Dockerfiles/Dockerfile-0.11 \
-		--tag $(DOCKER_IMAGE):0.11 \
-		$(DIR)/Dockerfiles
-
-build-1.0:
-	@docker build \
-		--build-arg http_proxy=${http_proxy} \
-		--build-arg https_proxy=${https_proxy} \
-		--file $(DIR)/Dockerfiles/Dockerfile-1.0 \
-		--tag $(DOCKER_IMAGE):1.0 \
-		$(DIR)/Dockerfiles
-
-
-test-0.10: build-0.10
+test: build
 	@docker run --rm -t \
 		-e http_proxy=${http_proxy} \
 		-e https_proxy=${https_proxy} \
@@ -42,58 +20,21 @@ test-0.10: build-0.10
 		-v /tmp:/tmp \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		dsuite/goss:latest \
-		dgoss run -e CADDY=0.10 --entrypoint=/goss/entrypoint.sh $(DOCKER_IMAGE):0.10
-
-test-0.11: build-0.11
-	@docker run --rm -t \
-		-e http_proxy=${http_proxy} \
-		-e https_proxy=${https_proxy} \
-		-v $(DIR)/tests:/goss \
-		-v /tmp:/tmp \
-		-v /var/run/docker.sock:/var/run/docker.sock \
-		dsuite/goss:latest \
-		dgoss run -e CADDY=0.11 --entrypoint=/goss/entrypoint.sh $(DOCKER_IMAGE):0.11
-
-test-1.0: build-1.0
-	@docker run --rm -t \
-		-e http_proxy=${http_proxy} \
-		-e https_proxy=${https_proxy} \
-		-v $(DIR)/tests:/goss \
-		-v /tmp:/tmp \
-		-v /var/run/docker.sock:/var/run/docker.sock \
-		dsuite/goss:latest \
-		dgoss run -e CADDY=1.0 --entrypoint=/goss/entrypoint.sh $(DOCKER_IMAGE):1.0
-
-push-0.10: build-0.10
-	@docker push $(DOCKER_IMAGE):0.10
-
-push-0.11: build-0.11
-	@docker push $(DOCKER_IMAGE):0.11
-
-push-1.0: build-1.0
-	@docker push $(DOCKER_IMAGE):1.0
+		dgoss run -e CADDY=$(CADDY_VERSION) --entrypoint=/goss/entrypoint.sh $(DOCKER_IMAGE):$(CADDY_VERSION)
 
 
-shell-0.10: build-0.10
+push: build
+	@docker push $(DOCKER_IMAGE):$(CADDY_VERSION)
+
+
+shell: build
 	@docker run -it --rm \
 		-e http_proxy=${http_proxy} \
 		-e https_proxy=${https_proxy} \
-		$(DOCKER_IMAGE):0.10 \
+		-e DEBUG_LEVEL=DEBUG \
+		$(DOCKER_IMAGE):$(CADDY_VERSION) \
 		bash
 
-shell-0.11: build-0.11
-	@docker run -it --rm \
-		-e http_proxy=${http_proxy} \
-		-e https_proxy=${https_proxy} \
-		$(DOCKER_IMAGE):0.11 \
-		bash
-
-shell-1.0: build-1.0
-	@docker run -it --rm \
-		-e http_proxy=${http_proxy} \
-		-e https_proxy=${https_proxy} \
-		$(DOCKER_IMAGE):1.0 \
-		bash
 
 remove:
 	@if [ $(shell docker images -f "dangling=true" -q | wc -l) -gt 0 ]; then \

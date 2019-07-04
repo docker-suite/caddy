@@ -1,3 +1,7 @@
-FROM dsuite/caddy:1.0
+FROM dsuite/caddy:latest
+
+ENV PLUGINS="http.git"
+
+RUN bash -c '/usr/local/bin/caddy-install.sh'
 
 COPY /rootfs /

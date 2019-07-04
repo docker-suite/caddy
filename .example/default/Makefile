@@ -19,7 +19,7 @@ build:
 	@docker build \
 		--build-arg http_proxy=${http_proxy} \
 		--build-arg https_proxy=${https_proxy} \
-		--file $(DIR)\Dockerfile \
+		--file $(DIR)/Dockerfile \
 		--tag $(DOCKER_IMAGE):$(PROJECT_VERSION) \
 		$(DIR)
 
