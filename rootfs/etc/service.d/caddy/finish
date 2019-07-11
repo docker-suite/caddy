@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-echo >&2 "Ending Service caddy with parameters ${@}"
+# Add libraries
+source /usr/local/lib/bash-logger.sh
+source /usr/local/lib/persist-env.sh
+
+WARNING "[CADDY] -- Ending Service caddy with parameters ${@}"
 
 # Tell runit to shutdown the system:
 [ "$1" = 1 ] && runit stop &
