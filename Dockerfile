@@ -39,7 +39,7 @@ RUN \
 	set -x \
     # Update repository indexes
     && apk-update \
-    # Install Caddy server
+    # Install packages needed by Caddy server
     && apk-install libcap \
 	# Clear apk's cache
 	&& apk-cleanup
@@ -47,11 +47,9 @@ RUN \
 ## Copy files
 COPY /rootfs /
 
-## Make scripts executable
-RUN chmod +x /usr/local/bin/caddy-install.sh
-
 ## Install latest version of caddy
-RUN bash -c '/usr/local/bin/caddy-install.sh'
+RUN chmod +x /usr/local/bin/caddy-install.sh \
+    && bash -c '/usr/local/bin/caddy-install.sh'
 
 ## Add volume to allow persistence
 VOLUME ["/etc/caddy", "/etc/caddy/certificates", "/var/www", "/var/log"]
