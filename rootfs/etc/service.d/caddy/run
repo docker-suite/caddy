@@ -4,8 +4,6 @@
 # set -u : Exit the script when using uninitialised variable.
 set -eu
 
-printenv
-
 # Add libraries
 source /usr/local/lib/bash-logger.sh
 source /usr/local/lib/persist-env.sh
