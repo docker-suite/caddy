@@ -1,5 +1,5 @@
 
-FROM dsuite/alpine-runit:3.9
+FROM dsuite/alpine-runit:3.10
 
 
 LABEL maintainer="Hexosse <hexosse@gmail.com>" \
