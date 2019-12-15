@@ -1,9 +1,7 @@
 DIR:=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
-ROOT:=$(strip $(abspath $(DIR)/../..))
-PROJECT_NAME:=$(strip $(shell basename $(ROOT)))
 PROJECT_VERSION:=$(strip $(shell basename $(DIR)))
-DOCKER_IMAGE=dsuite/$(PROJECT_NAME)
-CONTAINER:=$(PROJECT_NAME)-$(PROJECT_VERSION)
+DOCKER_IMAGE=dsuite/caddy
+CONTAINER:=caddy-$(PROJECT_VERSION)
 
 
 build:
@@ -11,8 +9,8 @@ build:
 		--file $(DIR)/docker-compose.yml \
 		--project-name $(DOCKER_IMAGE):$(PROJECT_VERSION) \
 		build
-
-run: build
+run:
+	@$(MAKE) build
 	@docker-compose up -d --build
 
 down:

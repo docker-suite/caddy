@@ -1,10 +1,10 @@
 DIR:=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
-ROOT:=$(strip $(abspath $(DIR)/../..))
-PROJECT_NAME:=$(strip $(shell basename $(ROOT)))
 PROJECT_VERSION:=$(strip $(shell basename $(DIR)))
-DOCKER_IMAGE=dsuite/$(PROJECT_NAME)
-CONTAINER:=$(PROJECT_NAME)-$(PROJECT_VERSION)
+DOCKER_IMAGE=dsuite/caddy
+CONTAINER:=caddy-$(PROJECT_VERSION)
 
+.DEFAULT_GOAL := run
+.PHONY: *
 
 build:
 	# Create folder to share with caddy
@@ -23,10 +23,12 @@ build:
 		--tag $(DOCKER_IMAGE):$(PROJECT_VERSION) \
 		$(DIR)
 
-run: build
+run:
+	@$(MAKE) build
 	@docker run -it --rm \
 		-e http_proxy=${http_proxy} \
 		-e https_proxy=${https_proxy} \
+		-e DEBUG_LEVEL=DEBUG \
 		-p 2015:2015 \
     	--name $(CONTAINER) \
 		$(DOCKER_IMAGE):$(PROJECT_VERSION) \

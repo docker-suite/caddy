@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1091
 
 # Add libraries
 source /usr/local/lib/bash-logger.sh
 source /usr/local/lib/persist-env.sh
 
-WARNING "[CADDY] -- Ending Service caddy with parameters ${@}"
+WARNING "[CADDY] -- Ending Service caddy with parameters $*"
 
 # Tell runit to shutdown the system:
 [ "$1" = 1 ] && runit stop &

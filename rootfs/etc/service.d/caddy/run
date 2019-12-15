@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1091
 
 # set -e : Exit the script if any statement returns a non-true return value.
 # set -u : Exit the script when using uninitialised variable.
@@ -35,18 +36,21 @@ CADDYPATH=${CADDYPATH:=/etc/caddy/certificates}
 # A Caddyfile must exist in /etc/caddy
 # if not, just create a default simple one
 if [ ! -f /etc/caddy/Caddyfile ]; then
-    echo "# Caddy config file" > /etc/caddy/Caddyfile
-    echo "# See: https://caddyserver.com/docs/caddyfile" >> /etc/caddy/Caddyfile
-    echo "" >> /etc/caddy/Caddyfile
-    echo "0.0.0.0" >> /etc/caddy/Caddyfile
-    echo "root /var/www" >> /etc/caddy/Caddyfile
-    echo "log stdout" >> /etc/caddy/Caddyfile
-    echo "errors stdout" >> /etc/caddy/Caddyfile
-    chown caddy:caddy /etc/caddy/Caddyfile
+    {
+        echo "# Caddy config file"
+        echo "# See: https://caddyserver.com/docs/caddyfile"
+        echo ""
+        echo "0.0.0.0"
+        echo "root /var/www"
+        echo "log stdout"
+        echo "errors stdout"
+    } > /etc/caddy/Caddyfile
 fi
+chown -R caddy:caddy /etc/caddy
 
 # Let's go and start Caddy
 NOTICE "[CADDY] -- Starting Service caddy ..."
+DEBUG "[CADDY] [PARAMS] $CADDY_STARTPARAMS"
 exec su-exec caddy /usr/bin/caddy ${CADDY_STARTPARAMS}
 
 # This exit code will be sent as the first parameter to the finish script
