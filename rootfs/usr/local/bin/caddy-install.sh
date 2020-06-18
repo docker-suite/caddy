@@ -39,5 +39,5 @@ setcap cap_net_bind_service=+eip /usr/bin/caddy
 NOTICE "$(/usr/bin/caddy --version)"
 
 # export verion to file
-/usr/bin/caddy --version | grep "Caddy v" | cut -d ' ' -f2 | cut -d 'v' -f2 > /VERSION
+/usr/bin/caddy --version | grep "v" | cut -d 'v' -f2 > /VERSION
 
