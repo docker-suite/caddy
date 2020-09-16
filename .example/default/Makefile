@@ -14,11 +14,13 @@ build:
 		-v $(DIR)/rootfs/var/www:/data \
 		-e http_proxy=${http_proxy} \
 		-e https_proxy=${https_proxy} \
+		-e no_proxy=${no_proxy} \
 		dsuite/alpine-data sh -c "curl -O https://raw.githubusercontent.com/cbracco/html5-test-page/master/index.html"
 	# Build caddy image
 	@docker build \
 		--build-arg http_proxy=${http_proxy} \
 		--build-arg https_proxy=${https_proxy} \
+		--build-arg no_proxy=${no_proxy} \
 		--file $(DIR)/Dockerfile \
 		--tag $(DOCKER_IMAGE):$(PROJECT_VERSION) \
 		$(DIR)
@@ -28,6 +30,7 @@ run:
 	@docker run -it --rm \
 		-e http_proxy=${http_proxy} \
 		-e https_proxy=${https_proxy} \
+		-e no_proxy=${no_proxy} \
 		-e DEBUG_LEVEL=DEBUG \
 		-p 2015:2015 \
     	--name $(CONTAINER) \
