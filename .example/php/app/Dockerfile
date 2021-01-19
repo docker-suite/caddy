@@ -1,3 +1,3 @@
-FROM dsuite/alpine-php7:7.4
+FROM dsuite/alpine-php:7.4-fpm
 
 COPY /rootfs /

@@ -1,8 +1,17 @@
-http://localhost {
+# domain name.
+:80
 
-    root    /var/www
-    fastcgi / app:9000 php
-    log     stdout
-    errors  stdout
-    #on startup php-fpm
+# Set this path to your site's directory.
+root * /var/www
+
+# Proxy all PHP requests to a FastCGI responder
+# listening at app:9000:
+php_fastcgi app:9000
+
+# Enable the static file server.
+file_server
+
+# Configure where to write the logs
+log {
+    output stdout
 }

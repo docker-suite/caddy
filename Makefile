@@ -13,34 +13,25 @@ version = latest
 
 
 build:
-	@docker build \
-		--build-arg http_proxy=${http_proxy} \
-		--build-arg https_proxy=${https_proxy} \
-		--build-arg no_proxy=${no_proxy} \
+	@docker build  \
 		--file $(DIR)/Dockerfile \
 		--tag $(DOCKER_IMAGE):$(version) \
 		$(DIR)
 
-test: build
+test:
 	@docker run --rm -t \
-		-e http_proxy=${http_proxy} \
-		-e https_proxy=${https_proxy} \
-		-e no_proxy=${no_proxy} \
 		-v $(DIR)/tests:/goss \
 		-v /tmp:/tmp \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		dsuite/goss:latest \
 		dgoss run -e CADDY=$(version) --entrypoint=/goss/entrypoint.sh $(DOCKER_IMAGE):$(version)
 
-push: build
+push:
 	@docker push $(DOCKER_IMAGE):$(version)
 
 
-shell: build
+shell:
 	@docker run -it --rm \
-		-e http_proxy=${http_proxy} \
-		-e https_proxy=${https_proxy} \
-		-e no_proxy=${no_proxy} \
 		-e DEBUG_LEVEL=DEBUG \
 		$(DOCKER_IMAGE):$(version) \
 		bash
@@ -53,9 +44,6 @@ remove:
 
 readme:
 	@docker run -t --rm \
-		-e http_proxy=${http_proxy} \
-		-e https_proxy=${https_proxy} \
-		-e no_proxy=${no_proxy} \
 		-e DEBUG_LEVEL=DEBUG \
 		-e DOCKER_USERNAME=${DOCKER_USERNAME} \
 		-e DOCKER_PASSWORD=${DOCKER_PASSWORD} \

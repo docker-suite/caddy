@@ -9,16 +9,8 @@ services:
   app:
     build:
       context: ./app
-      args:
-        - http_proxy=${http_proxy}
-        - https_proxy=${https_proxy}
-        - no_proxy=${no_proxy}
     container_name: caddy_app
     restart: unless-stopped
-    environment:
-      - http_proxy=${http_proxy}
-      - https_proxy=${https_proxy}
-      - no_proxy=${no_proxy}
     volumes:
       - webapp:/var/www
 
@@ -26,16 +18,8 @@ services:
   web:
     build:
       context: ./web
-      args:
-        - http_proxy=${http_proxy}
-        - https_proxy=${https_proxy}
-        - no_proxy=${no_proxy}
     container_name: caddy_web
     restart: unless-stopped
-    environment:
-      - http_proxy=${http_proxy}
-      - https_proxy=${https_proxy}
-      - no_proxy=${no_proxy}
     volumes:
       - webapp:/var/www:ro
     ports:

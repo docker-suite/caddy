@@ -3,6 +3,9 @@
 This is a simple example where caddy serve a single php page.  
 The php page is provided by [dsuite/alpine-php7][alpine-php7] image.
 
-use `make run` to start caddy server and close it with `make down`
+use `make up` to start caddy server then navigate to http://localhost:8080
+
+use `make down` to stop caddy server
+
 
 [alpine-php7]: https://hub.docker.com/r/dsuite/alpine-php7/

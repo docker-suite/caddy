@@ -2,17 +2,10 @@
 # shellcheck disable=SC1091
 
 # set -e : Exit the script if any statement returns a non-true return value.
-# set -u : Exit the script when using uninitialised variable.
-set -eu
-
-# echo "##################################################"
-# echo "PLUGINS : $PLUGINS"
-# echo "TELEMETRY: $TELEMETRY"
-# echo "##################################################"
+set -e
 
 # Add libraries
 source /usr/local/lib/bash-logger.sh
-source /usr/local/lib/persist-env.sh
 
 
 # check if caddy is running
@@ -21,12 +14,35 @@ if [ -n "$(getpidsbyname caddy 2>/dev/null)" ]; then
     exit 1
 fi
 
+#
+urlencode() {
+    # urlencode <string>
+    old_lc_collate=$LC_COLLATE
+    LC_COLLATE=C
+    local i=1
+    local length="${#1}"
+    while [ $i -le $length ]; do
+        local c=$(echo "$(expr substr $1 $i 1)")
+        case $c in
+            [a-zA-Z0-9.~_-]) printf "$c" ;;
+            ' ') printf "%%20" ;;
+            *) printf '%%%02X' "'$c" ;;
+        esac
+        i=$(expr $i + 1)
+    done
+
+    LC_COLLATE=$old_lc_collate
+}
+# plugins list
+PLUGIN_PARAM=""
+for i in "${PLUGINS[@]}"; do
+    if [ -n "${PLUGINS[$i]}" ]; then
+        PLUGIN_PARAM="$PLUGIN_PARAM&p=$(urlencode ${PLUGINS[$i]})"
+    fi
+done
+
 # Download from caddyserver.com
-curl -L -o /tmp/caddy.tar.gz "https://caddyserver.com/download/linux/amd64?plugins=${PLUGINS}&license=${LICENSE}&telemetry=${TELEMETRY}"
-# Extract caddy to /usr/bin
-tar -zxf /tmp/caddy.tar.gz -C /usr/bin
-# Remove archive
-rm -f /tmp/caddy.tar.gz
+curl -L -o /usr/bin/caddy "https://caddyserver.com/api/download?os=linux&arch=amd64$PLUGIN_PARAM"
 # Make it executable
 chmod +x /usr/bin/caddy
 
@@ -36,8 +52,4 @@ chmod +x /usr/bin/caddy
 setcap cap_net_bind_service=+eip /usr/bin/caddy
 
 # validate install
-NOTICE "$(/usr/bin/caddy --version)"
-
-# export verion to file
-/usr/bin/caddy --version | grep "v" | cut -d 'v' -f2 > /VERSION
-
+echo "$(/usr/bin/caddy version)"

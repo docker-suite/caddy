@@ -2,4 +2,5 @@
 
 This is a simple example where caddy serve a single html page
 
-use `make run` to start caddy server
+use `make` to start caddy server then navigate to http://localhost:8080
+
