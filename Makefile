@@ -1,5 +1,7 @@
 ## Name of the image
 DOCKER_IMAGE=dsuite/caddy
+DOCKER_IMAGE_CREATED=$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
+DOCKER_IMAGE_REVISION=$(shell git rev-parse --short HEAD)
 
 ## Current directory
 DIR:=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
@@ -14,17 +16,15 @@ version = latest
 
 build:
 	@docker build  \
+		--build-arg DOCKER_IMAGE_CREATED=$(DOCKER_IMAGE_CREATED) \
+		--build-arg DOCKER_IMAGE_REVISION=$(DOCKER_IMAGE_REVISION) \
 		--file $(DIR)/Dockerfile \
 		--tag $(DOCKER_IMAGE):$(version) \
 		$(DIR)
 
 test:
-	@docker run --rm -t \
-		-v $(DIR)/tests:/goss \
-		-v /tmp:/tmp \
-		-v /var/run/docker.sock:/var/run/docker.sock \
-		dsuite/goss:latest \
-		dgoss run -e CADDY=$(version) --entrypoint=/goss/entrypoint.sh $(DOCKER_IMAGE):$(version)
+	@GOSS_FILES_PATH=$(DIR)/tests \
+	 	dgoss run $(DOCKER_IMAGE):$(version) bash -c "sleep 60"
 
 push:
 	@docker push $(DOCKER_IMAGE):$(version)

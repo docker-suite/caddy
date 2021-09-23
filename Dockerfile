@@ -1,10 +1,20 @@
 
-FROM dsuite/alpine-base:3.13
+FROM dsuite/alpine-base:3.14
+
+ARG DOCKER_IMAGE_CREATED
+ARG DOCKER_IMAGE_REVISION
 
 LABEL maintainer="Hexosse <hexosse@gmail.com>" \
-      description="Minimal Alpine image with Caddy server." \
-      vendor="docker-suite" \
-      license="MIT"
+    org.opencontainers.image.title="docker-suite dsuite/caddy image" \
+    org.opencontainers.image.description="Minimal Alpine image with Caddy server" \
+    org.opencontainers.image.authors="Hexosse <hexosse@gmail.com>" \
+    org.opencontainers.image.vendor="docker-suite" \
+    org.opencontainers.image.licenses="MIT" \
+    org.opencontainers.image.url="https://github.com/docker-suite/caddy" \
+    org.opencontainers.image.source="https://github.com/docker-suite/caddy" \
+    org.opencontainers.image.documentation="https://github.com/docker-suite/caddy/blob/master/Readme.md" \
+    org.opencontainers.image.created="${DOCKER_IMAGE_CREATED}" \
+    org.opencontainers.image.revision="${DOCKER_IMAGE_REVISION}"
 
 ARG PLUGINS
 
@@ -19,7 +29,7 @@ RUN \
 	set -x \
     # Ensure www-data user exists
     # 82 is the standard uid/gid for "www-data" in Alpine
-    && addgroup -g 82 -S www-data 2>/dev/null \
+    # (www-data group already exist in alpine)
     && adduser -u 82 -S -D -s /sbin/nologin -G www-data -g www-data www-data 2>/dev/null \
     # Add caddy user
     && addgroup -g 101 -S caddy 2>/dev/null \
@@ -50,7 +60,7 @@ ENV XDG_CONFIG_HOME /config
 ENV XDG_DATA_HOME /data
 
 ## Copy files
-COPY /rootfs /
+COPY rootfs /
 
 ## Install latest version of caddy
 RUN chmod +x /usr/local/bin/caddy-install.sh \

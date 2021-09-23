@@ -1,3 +1,3 @@
 FROM dsuite/caddy:latest
 
-COPY /rootfs /
+COPY rootfs /

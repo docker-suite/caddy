@@ -5,4 +5,4 @@ FROM dsuite/caddy:latest
 
 # RUN bash -c '/usr/local/bin/caddy-install.sh'
 
-COPY /rootfs /
+COPY rootfs /
